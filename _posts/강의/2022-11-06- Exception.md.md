@@ -6,9 +6,10 @@ tags: [til, exception]
 ---
 
 # Exception
-	API에 따라 세분화된 예외를 내려줘야한다. 단순히 4XX, 5XX 에러가 아니라 어느 Controller에서 어떤 예외가 발생했는지 세밀하게 예외를 내려줘야하는데 기존의 방식들(servlet 방식)은 그렇게 사용하기 힘들다.
 
-### @ExceptionHandler 
+##### API에 따라 세분화된 예외를 내려줘야한다. 단순히 4XX, 5XX 에러가 아니라 어느 Controller에서 어떤 예외가 발생했는지 세밀하게 예외를 내려줘야하는데 기존의 방식들(servlet 방식)은 그렇게 사용하기 힘들다.
+
+## @ExceptionHandler 
 : Spring에서 제공하는 예외처리 어노테이션 , 예외발생시 우선순위가 제일 높게 실행된다.
 
 예외처리 시, @ExceptionHandler 를 사용하게 되면 아래의 흐름으로 실행된다.
@@ -23,10 +24,12 @@ tags: [til, exception]
 
 @ResponseStatus(HttpStatus.BAD_REQUEST) // 정상적 return 이 아니라 에러를 만들고 싶으면 붙인다.
 @ExceptionHandler(IllegalArgumentException.class)
+
 public ErrorResult illegalExHandler(IllegalArgumentException e) {
 	log.error("[exceptionHanlder] ex", e);
-	return new ErrorResult("BAD", e.getMessage()); 
 	// 정상으로 return 한다. -> http 상태코드 200
+	return new ErrorResult("BAD", e.getMessage()); 
+
 }
 ```
 
@@ -36,7 +39,7 @@ public ErrorResult illegalExHandler(IllegalArgumentException e) {
 
 위와 같은 사항(1번, 3번)들로 인해 @RestControllerAdvice 을 이용해 예외처리를 위한 로직을 모아둔다.
 
-### @RestControllerAdvice
+## @RestControllerAdvice
 @RestController와 @Controller 처럼 상단에서 선언을 해서 예외처리를 위한 클래스를 만든다.
 
 ```java
