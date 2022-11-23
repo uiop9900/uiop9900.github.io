@@ -1,5 +1,5 @@
 ---
-title: @PostConstruct와 @Supplier
+title: PostConstruct와 Supplier Annotation
 date: 2022-11-17 17:18:00
 categories: [TIL]
 tags: [til, spring]  
