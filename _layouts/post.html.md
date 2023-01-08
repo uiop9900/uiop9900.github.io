@@ -1,0 +1,10 @@
+
+<!-- Utterances 댓글 스니핏 삽입 -->
+<script src="https://utteranc.es/client.js"
+        repo="uiop9900 / blog_comments "
+        issue-term="title"
+        label="✨comment💬✨"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
