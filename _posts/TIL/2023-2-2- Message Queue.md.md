@@ -41,7 +41,7 @@ tags: []
 
 ### 동작 순서
 
-![Foo](/asserts/img/mq_image.png)
+![Foo](/assets/img/mq_image.png)
 
 
 1) 송신자(생산자)가 메세지를 송신하면 메세지가 메세지 큐에 추가된다.
