@@ -6,11 +6,12 @@ tags: []
 ---
 
 
-코드를 짜게 되면 `@Transactional` 는 필수적으로 사용하게 되는데, 여러 쓰레드가 한꺼번에 `@Transactional`를 물게 될 경우, 데이터가 서로 안 맞는 상황이 생길 수 있다.
+코드를 짜게 되면 `@Transactional` 는 필수적으로 사용하게 되는데, 여러 쓰레드가 한꺼번에 Transaction을 물게 될 경우, 데이터가 서로 안 맞는 상황이 생길 수 있다.
 이런 경우, *데이터의 정합성* 이 깨지기 때문에 `@Transactional` 은 isolation(격리수준) 설정을 통해서 데이터들의 정합성을 맞춘다.
 
 *데이터의 정합성: 데이터끼리 서로 모슨 없이 일치해야하는 것*
 
+- Transaction과 `@Transactional` 은 동일하지 않다.
 ---
 
 # `@Transactional`  격리수준 단계
@@ -48,7 +49,7 @@ tags: []
 
 
 
-## `REPEATABLE_READ`
+## REPEATABLE_READ 
 
 그럼 먼저 default 설정인 `REPEATABLE_READ` 로 트랜잭션을 실험해보자.
 
@@ -56,27 +57,33 @@ tags: []
 
 	세션1 과 세션2에서 Tx를 시작한다.
 	세션1에서 값을 update 한다.
-	세션2에서 값을 불러온다.
-	세션2은 세션1이 commit이 될때까지 변경된 값을 반영하지 못한다.
+	세션2에서 update 된 값을 불러온다.
+
+<b>세션2는 세션1이 값을 변경해서 commit 하여도 변경된 값을 가지고 오지 못하고, Tx 시작시에 가지고 왔던 기존 값을 물고 있다. </b>
 
 
-## `READ_COMMITED`
+## READ_COMMITED
 
 
-![READ-UNCOMMITTED](/assets/img/READ-UNCOMMITTED.jpg)
+![READ-COMMITTED](/assets/img/READ-COMMITTED.jpg)
 
 	세션1 과 세션2에서 Tx를 시작한다.
 	세션1에서 값을 update 한다.
-	세션2에서 값을 불러온다.
-	세션2은 세션1이 commit 되지 않아도 값을 가져온다.
+	세션2에서 update 된 값을 불러온다.
 
+<b>세션1에서 변경된 값을 commit 하면 세션2는 변경된 값을 가지고 온다. </b> <br>
 
-위의 결과와 같이, `REPEATABLE_READ` 는 다른 트랜잭션에서 commit 되지않으면 계속해서 기존의 값을 가지고 오고 `READ-UNCOMMITTED` 는 commit되지 않아도 변경된 값을 가지고 와서 확인할 수 있다.
+위의 결과와 같이, `REPEATABLE_READ` 는 다른 트랜잭션에서 commit 이 되어도 기존의 값을 물고 있고 `READ-UNCOMMITTED` 는 commit이 되면 변경된 값을 가지고 와서 확인할 수 있다.
 
 <br>
 
 #### TMI 새로운 상식
 - 쿼리를 통해서 트랜잭션을 db에 바로 걸 수 있다.
+``` Mysql
+SELECT @@`Transaction_isolation`;  # 현재 격리수준 확인
+SET @@session.transaction_isolation = 'READ-COMMITTED'; # 격리수준 변경하기
+```
+
 - 한 세션은 하나의 DB와의 커넥션으로 이해할 수 있다. 
 	- 인텔리제이에서는 db console을 키면 된다. 
 	- 하지만 하나의 콘솔이 하나의 세션을 의미하는 것은 아니다. = 한 세션에 여러개의 콘솔을 사용할 수 있다.
