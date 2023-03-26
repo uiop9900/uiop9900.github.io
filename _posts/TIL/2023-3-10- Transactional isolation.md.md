@@ -12,6 +12,7 @@ tags: []
 *데이터의 정합성: 데이터끼리 서로 모슨 없이 일치해야하는 것*
 
 - Transaction과 `@Transactional` 은 동일하지 않다.
+
 ---
 
 # `@Transactional`  격리수준 단계
